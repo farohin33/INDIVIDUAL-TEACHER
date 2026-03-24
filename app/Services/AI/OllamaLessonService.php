@@ -10,7 +10,7 @@ class OllamaLessonService
     public function generate($topic)
     {
 
-        $response = Http::post('http://localhost:11434/api/generate', [
+        $response = Http::timeout(520)->post('http://localhost:11434/api/generate', [
 
             "model" => "llama3",
 

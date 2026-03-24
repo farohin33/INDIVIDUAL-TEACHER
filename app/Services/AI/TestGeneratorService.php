@@ -2,71 +2,35 @@
 
 namespace App\Services\AI;
 
-use OpenAI;
-
 class TestGeneratorService
 {
+
     public function generate($topic)
     {
 
-        try {
+        $ai = new GrokService();
 
-            $client = OpenAI::client(env('OPENAI_API_KEY'));
+        $prompt = "
+Create 10 test questions about '{$topic->title}'.
 
-            $prompt = "
-Generate a school test with 10 questions about {$topic->title}.
-
-Format JSON:
+Return JSON:
 
 [
 {
-question: '',
-a: '',
-b: '',
-c: '',
-d: '',
-correct: 'a'
+question:'',
+a:'',
+b:'',
+c:'',
+d:'',
+correct:'a'
 }
 ]
-
-Only JSON.
 ";
 
-            $response = $client->chat()->create([
-                'model' => 'gpt-4o-mini',
-                'messages' => [
-                    [
-                        'role' => 'user',
-                        'content' => $prompt
-                    ]
-                ]
-            ]);
+        $response = $ai->ask($prompt);
 
-            $text = $response->choices[0]->message->content;
-
-            $questions = json_decode($text, true);
-
-            if(!$questions){
-                return [];
-            }
-
-            return $questions;
-
-        } catch (\Exception $e) {
-
-            // если OpenAI упал — сайт не падает
-            return [
-                [
-                    "question" => "AI temporary unavailable",
-                    "a" => "Retry later",
-                    "b" => "Retry later",
-                    "c" => "Retry later",
-                    "d" => "Retry later",
-                    "correct" => "a"
-                ]
-            ];
-
-        }
+        return json_decode($response, true);
 
     }
+
 }

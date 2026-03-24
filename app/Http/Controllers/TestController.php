@@ -3,29 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lesson;
-use App\Models\Test;
+use App\Models\Topic;
 use App\Models\Question;
 use App\Services\AI\TestGeneratorService;
 class TestController extends Controller
 {
 
-  public function start($lessonId)
+ public function generate($topicId)
 {
 
-    $lesson = Lesson::findOrFail($lessonId);
+    $topic = Topic::findOrFail($topicId);
 
-    $test = Test::where('lesson_id',$lesson->id)->first();
+    $ai = new TestGeneratorService();
 
-    if(!$test){
+    $questions = $ai->generate($topic);
 
-        $test = app(TestGeneratorService::class)
-        ->generate($lesson);
-
-    }
-
-    $questions = $test->questions;
-
-    return view('tests.start',compact('test','questions'));
+    return view('test.start', compact('topic','questions'));
 
 }
 

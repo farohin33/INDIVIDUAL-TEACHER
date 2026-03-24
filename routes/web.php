@@ -57,10 +57,11 @@ Route::resource('topics', TopicController::class)
 |--------------------------------------------------------------------------
 */
 
-Route::get('/lesson/{topic}',
-    [LessonController::class,'show']
-)->middleware('auth');
+// Генерация
+Route::get('/generate/{topic}', [LessonController::class, 'generateFromTopic'])->name('lesson.generate');
 
+// Просмотр (добавьте ->name если его нет)
+Route::get('/lesson/{lesson}', [LessonController::class, 'show'])->name('lesson.show');
 
 /*
 |--------------------------------------------------------------------------
@@ -71,7 +72,6 @@ Route::get('/lesson/{topic}',
 Route::get('/lesson/{lesson}/test',
     [TestController::class,'start']
 )->middleware('auth');
-
 
 /*
 |--------------------------------------------------------------------------

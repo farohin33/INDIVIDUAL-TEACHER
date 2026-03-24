@@ -2,38 +2,26 @@
 
 namespace App\Services\AI;
 
-use OpenAI;
-
 class LessonGeneratorService
 {
 
     public function generate($topic)
     {
 
-        $client = OpenAI::client(config('services.openai.key'));
+        $ai = new GrokService();
 
         $prompt = "
-Explain the topic '{$topic->title}' for a school student.
+Explain the school topic '{$topic->title}'.
 
 Structure:
 
-1. Simple explanation
-2. Key ideas
-3. Examples
-4. Summary
+1 Explanation
+2 Key concepts
+3 Examples
+4 Summary
 ";
 
-        $response = $client->chat()->create([
-            'model' => 'gpt-4.1-mini',
-            'messages' => [
-                [
-                    'role' => 'user',
-                    'content' => $prompt
-                ]
-            ]
-        ]);
-
-        return $response->choices[0]->message->content;
+        return $ai->ask($prompt);
 
     }
 

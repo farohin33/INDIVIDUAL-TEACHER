@@ -4,23 +4,48 @@ namespace App\Http\Controllers;
 
 use App\Models\Topic;
 use App\Models\Lesson;
-use App\Services\AI\LessonGeneratorService;
-use App\Services\AI\OllamaLessonService;
+use App\Services\AI\GrokService;
+use Illuminate\Http\Request;
 
 class LessonController extends Controller
 {
+    protected $grok;
 
-public function show($topicId)
+    public function __construct(GrokService $grok)
+    {
+        $this->grok = $grok;
+    }
+
+ public function generateFromTopic(Topic $topic)
 {
+    try {
+        // Updated Prompt for English output
+        $prompt = "Topic: '{$topic->name}'. 
+        Act as an expert educator. Provide a brief learning summary.
+        STRICT FORMAT:
+        1. THE ESSENCE (1-2 clear sentences).
+        2. KEY TAKEAWAYS (Bullet points, max 3).
+        3. REAL-WORLD EXAMPLE (A practical application).
+        Language: English only. Keep it concise and easy to remember.";
 
-$topic = Topic::findOrFail($topicId);
+        $content = $this->grok->ask($prompt);
 
-$ai = new OllamaLessonService();
+        $lesson = Lesson::updateOrCreate(
+            ['topic_id' => $topic->id],
+            [
+                'title' => $topic->name,
+                'content' => $content
+            ]
+        );
 
-$lesson = $ai->generate($topic);
+        return redirect()->route('lesson.show', $lesson->id);
 
-return view('lesson.show',compact('lesson'));
-
+    } catch (\Exception $e) {
+        return back()->with('error', 'AI Generation failed: ' . $e->getMessage());
+    }
 }
-
+    public function show(Lesson $lesson)
+    {
+        return view('lesson.show', compact('lesson'));
+    }
 }
