@@ -5,32 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Topic;
 use App\Models\Lesson;
 use App\Services\AI\LessonGeneratorService;
+use App\Services\AI\OllamaLessonService;
 
 class LessonController extends Controller
 {
 
-   public function show($topicId)
+public function show($topicId)
 {
 
-    $topic = Topic::findOrFail($topicId);
+$topic = Topic::findOrFail($topicId);
 
-    $lesson = Lesson::where('topic_id',$topic->id)->first();
+$ai = new OllamaLessonService();
 
-    if(!$lesson){
+$lesson = $ai->generate($topic);
 
-        $ai = new LessonGeneratorService();
-
-        $content = $ai->generate($topic);
-
-        $lesson = Lesson::create([
-            'topic_id'=>$topic->id,
-            'title'=>$topic->title,
-            'content'=>$content
-        ]);
-
-    }
-
-    return view('lesson.show',compact('lesson'));
+return view('lesson.show',compact('lesson'));
 
 }
 
