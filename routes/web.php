@@ -79,9 +79,7 @@ Route::get('/lesson/{lesson}/test',
 |--------------------------------------------------------------------------
 */
 
-Route::post('/test/submit',
-    [AnswerController::class,'submit']
-)->middleware('auth');
+Route::get('/lesson/{lesson}/test', [LessonController::class, 'generateTest'])->name('lesson.test');
 
 
 /*

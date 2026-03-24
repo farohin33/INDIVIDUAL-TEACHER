@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Test;
 use App\Models\Topic;
 use App\Models\Lesson;
 use App\Services\AI\GrokService;
 use Illuminate\Http\Request;
+use App\Services\AI\TestGeneratorService;
 
 class LessonController extends Controller
 {
@@ -42,6 +43,28 @@ class LessonController extends Controller
 
     } catch (\Exception $e) {
         return back()->with('error', 'AI Generation failed: ' . $e->getMessage());
+    }
+}
+
+public function generateTest(\App\Models\Lesson $lesson, TestGeneratorService $testService)
+{
+    try {
+        $questions = $testService->generate($lesson->content);
+
+        // Если ИИ вернул ерунду, создаем пустой массив, чтобы не было ошибки
+        if (!is_array($questions)) {
+            $questions = [];
+        }
+
+        $test = \App\Models\Test::updateOrCreate(
+            ['lesson_id' => $lesson->id],
+            ['questions_data' => json_encode($questions)]
+        );
+
+        return view('tests.show', compact('test', 'lesson'));
+
+    } catch (\Exception $e) {
+        return back()->with('error', 'AI is busy. Please try again in 10 seconds.');
     }
 }
     public function show(Lesson $lesson)
