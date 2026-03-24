@@ -20,6 +20,6 @@ class AppServiceProvider extends ServiceProvider
    public function boot(): void
 {
     // Разрешаем скриптам работать до 2 минут (хватит для ИИ)
-    set_time_limit(120);
+    set_time_limit(360);
 }
 }

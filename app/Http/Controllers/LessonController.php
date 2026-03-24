@@ -46,27 +46,26 @@ class LessonController extends Controller
     }
 }
 
-public function generateTest(\App\Models\Lesson $lesson, TestGeneratorService $testService)
-{
-    try {
-        $questions = $testService->generate($lesson->content);
+public function generateTest(Lesson $lesson, TestGeneratorService $testService)
+    {
+        set_time_limit(120); // Решаем проблему 30 секунд
 
-        // Если ИИ вернул ерунду, создаем пустой массив, чтобы не было ошибки
-        if (!is_array($questions)) {
-            $questions = [];
+        try {
+            $questions = $testService->generate($lesson->content);
+
+            // Если ИИ вернул null, подменяем на пустой массив, чтобы foreach не падал
+            if (!is_array($questions)) { $questions = []; }
+
+            $test = Test::updateOrCreate(
+                ['lesson_id' => $lesson->id],
+                ['questions_data' => json_encode($questions)]
+            );
+
+            return view('tests.show', compact('test', 'lesson'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'AI error: ' . $e->getMessage());
         }
-
-        $test = \App\Models\Test::updateOrCreate(
-            ['lesson_id' => $lesson->id],
-            ['questions_data' => json_encode($questions)]
-        );
-
-        return view('tests.show', compact('test', 'lesson'));
-
-    } catch (\Exception $e) {
-        return back()->with('error', 'AI is busy. Please try again in 10 seconds.');
     }
-}
     public function show(Lesson $lesson)
     {
         return view('lesson.show', compact('lesson'));

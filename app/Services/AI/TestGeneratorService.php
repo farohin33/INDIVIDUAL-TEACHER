@@ -6,25 +6,26 @@ use Illuminate\Support\Facades\Http;
 
 class TestGeneratorService
 {
-    public function generate($lessonContent)
-    {
-        $prompt = "Context: '{$lessonContent}'. 
-        Create a 3-question MCQ quiz in English. 
-        Return ONLY a JSON array. No text before or after.
-        Format: [{\"question\":\"...\",\"options\":[\"...\"],\"answer\":\"...\"}]";
+public function generate($lessonContent)
+{
+    $prompt = "Context: '{$lessonContent}'. 
+    Create a 3-question MCQ quiz in English. 
+    Return ONLY a raw JSON array. No conversational text.
+    Format: [{\"question\":\"text\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"correct_text\"}]";
 
-        // Ставим таймаут для HTTP запроса на 100 секунд
-        $response = Http::timeout(100)->post("http://localhost:11434/api/chat", [
-            'model' => 'llama3.2:1b', // Самая быстрая модель
-            'messages' => [['role' => 'user', 'content' => $prompt]],
-            'stream' => false,
-        ]);
+    // Увеличиваем timeout до 100 секунд, чтобы не было ошибки 30s
+    $response = Http::timeout(100)->post("http://localhost:11434/api/chat", [
+        'model' => 'llama3.2:1b',
+        'messages' => [['role' => 'user', 'content' => $prompt]],
+        'stream' => false,
+        'options' => ['temperature' => 0.1] 
+    ]);
 
-        $content = $response->json()['message']['content'];
-        
-        // Убираем возможные лишние символы ```json ... ```
-        $cleanJson = preg_replace('/^```json|```$/m', '', $content);
-        
-        return json_decode(trim($cleanJson), true);
-    }
+    $content = $response->json()['message']['content'] ?? '';
+    
+    // Чистим JSON от лишних знаков ```json ... ```
+    $cleanJson = preg_replace('/^```json|```$/m', '', $content);
+    
+    return json_decode(trim($cleanJson), true);
+}
 }
