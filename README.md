@@ -1,66 +1,332 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# AI Teacher — Intelligent Learning Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+AI Teacher is an intelligent education platform built with **Laravel** that automatically generates **lessons**, **tests**, and **explanations of mistakes** using AI.
+The goal of the project is to create a modern learning environment similar to **Duolingo + Khan Academy + ChatGPT**, where students can study school subjects interactively.
 
-## About Laravel
+This project is designed for **education competitions, research projects, and AI-based learning systems**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+# Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### AI Lesson Generation
 
-## Learning Laravel
+The system automatically generates structured lessons for any topic using AI.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Each lesson contains:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+* Explanation of the topic
+* Key concepts
+* Examples
+* Summary
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+### AI Test Generation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+After completing a lesson, the student can generate a test.
 
-### Premium Partners
+The AI automatically creates:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+* 10 questions
+* 4 answer options
+* 1 correct answer
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### AI Mistake Explanation
 
-## Code of Conduct
+If a student answers incorrectly, the AI explains the mistake like a tutor.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Example:
 
-## Security Vulnerabilities
+* Why the answer is wrong
+* What concept was misunderstood
+* How to solve the problem correctly
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+### Subject Based Learning
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Subjects are organized in a sidebar.
+
+Example subjects:
+
+* math
+* algebra
+* geometry
+* physics
+* chemistry
+* biology
+* grammar
+* literature
+* history
+* geography
+* programming
+* informatics
+* statistics
+* economics
+* law
+* astronomy
+* ecology
+* logic
+
+Each subject contains multiple **topics**.
+
+---
+
+### Topic Navigation
+
+Students can:
+
+* browse subjects
+* open topics
+* generate lessons
+* take tests
+* see results
+
+---
+
+### Topic Search
+
+Students can quickly find topics using the search system.
+
+---
+
+### Topic Creation
+
+Teachers or users can create new topics that AI will generate lessons for.
+
+---
+
+# Technology Stack
+
+Backend
+
+* Laravel
+* PHP
+* MySQL
+* REST API
+* AI integration (Grok / xAI)
+
+Frontend
+
+* Blade templates
+* TailwindCSS
+* JavaScript
+
+AI
+
+* Grok (xAI API)
+
+---
+
+# Project Structure
+
+```
+app
+ ├── Http
+ │    ├── Controllers
+ │    │     ├── LessonController.php
+ │    │     ├── TestController.php
+ │    │     ├── TopicController.php
+ │    │     ├── SubjectController.php
+ │    │
+ │
+ ├── Models
+ │     ├── User.php
+ │     ├── Subject.php
+ │     ├── Topic.php
+ │     ├── Lesson.php
+ │     ├── Test.php
+ │     ├── Question.php
+ │     ├── Answer.php
+ │     ├── TestResult.php
+ │     ├── StudentProgress.php
+ │
+ ├── Services
+ │     └── AI
+ │           ├── GrokService.php
+ │           ├── LessonGeneratorService.php
+ │           ├── TestGeneratorService.php
+ │           ├── MistakeExplanationService.php
+```
+
+---
+
+# Database Tables
+
+The project uses several core tables:
+
+users
+subjects
+topics
+lessons
+tests
+questions
+answers
+test_results
+student_progress
+
+Relationships:
+
+```
+Subject → Topics
+Topic → Lesson
+Topic → Test
+Test → Questions
+Question → Answers
+User → Test Results
+User → Progress
+```
+
+---
+
+# Installation
+
+### 1 Install dependencies
+
+```
+composer install
+```
+
+---
+
+### 2 Configure environment
+
+Copy the environment file
+
+```
+cp .env.example .env
+```
+
+Edit database settings in `.env`.
+
+---
+
+### 3 Add AI API key
+
+```
+XAI_API_KEY=your_key_here
+```
+
+---
+
+### 4 Generate application key
+
+```
+php artisan key:generate
+```
+
+---
+
+### 5 Run migrations
+
+```
+php artisan migrate
+```
+
+---
+
+### 6 Seed the database
+
+```
+php artisan db:seed
+```
+
+This will populate:
+
+* subjects
+* topics
+* demo users
+
+---
+
+### 7 Run the server
+
+```
+php artisan serve
+```
+
+Open in browser:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+# Usage
+
+1 Open dashboard
+2 Choose a subject
+3 Select a topic
+4 Generate a lesson
+5 Study the lesson
+6 Start the test
+7 See results and explanations
+
+---
+
+# Example Workflow
+
+```
+Student selects subject
+        ↓
+Student opens topic
+        ↓
+AI generates lesson
+        ↓
+Student reads lesson
+        ↓
+Student starts test
+        ↓
+AI generates 10 questions
+        ↓
+Student answers
+        ↓
+AI explains mistakes
+```
+
+---
+
+# Future Improvements
+
+Possible improvements for the platform:
+
+* voice AI teacher
+* AI video lesson generation
+* adaptive learning paths
+* progress analytics
+* recommendation system
+* teacher dashboard
+* student performance charts
+
+---
+
+# Educational Purpose
+
+This project demonstrates:
+
+* AI integration in education
+* automated content generation
+* intelligent tutoring systems
+* adaptive learning architecture
+
+It can be used as:
+
+* school project
+* research project
+* AI education prototype
+* startup MVP
+
+---
+
+# Author
+
+AI Teacher Project
+Iamatullova Sevara
+Nematova Zuhal
+Safarzoda Farohin
+
+---
