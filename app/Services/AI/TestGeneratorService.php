@@ -2,30 +2,63 @@
 
 namespace App\Services\AI;
 
+use App\Models\Topic;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class TestGeneratorService
 {
-public function generate($lessonContent)
-{
-    $prompt = "Context: '{$lessonContent}'. 
-    Create a 3-question MCQ quiz in English. 
-    Return ONLY a raw JSON array. No conversational text.
-    Format: [{\"question\":\"text\",\"options\":[\"a\",\"b\",\"c\",\"d\"],\"answer\":\"correct_text\"}]";
+    /**
+     * Генерирует вопросы через Ollama или другой AI API
+     */
+    public function generate(Topic $topic)
+    {
+        $prompt = "Generate a JSON array of 5 multiple-choice questions about '{$topic->title}'. 
+        Each object must have: 
+        'question' (string), 
+        'options' (array of 4 strings), 
+        'correct_answer' (integer, index 0-3).
+        Return ONLY the raw JSON array, no markdown, no explanations.";
 
-    // Увеличиваем timeout до 100 секунд, чтобы не было ошибки 30s
-    $response = Http::timeout(100)->post("http://localhost:11434/api/chat", [
-        'model' => 'llama3.2:1b',
-        'messages' => [['role' => 'user', 'content' => $prompt]],
-        'stream' => false,
-        'options' => ['temperature' => 0.1] 
-    ]);
+        try {
+            // Замени URL на свой (например, если используешь Ollama локально)
+            $response = Http::timeout(30)->post('http://localhost:11434/api/generate', [
+                'model' => 'llama3', // или 'grok'/'mistral'
+                'prompt' => $prompt,
+                'stream' => false,
+                'format' => 'json', // Заставляем ИИ отдавать только JSON
+            ]);
 
-    $content = $response->json()['message']['content'] ?? '';
-    
-    // Чистим JSON от лишних знаков ```json ... ```
-    $cleanJson = preg_replace('/^```json|```$/m', '', $content);
-    
-    return json_decode(trim($cleanJson), true);
-}
+            if ($response->successful()) {
+                $data = $response->json();
+                $quizContent = $data['response'] ?? $data['content'];
+
+                // Проверяем, что это валидный JSON, прежде чем отдавать контроллеру
+                if ($this->isValidJson($quizContent)) {
+                    return $quizContent;
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error("AI Generation Error: " . $e->getMessage());
+        }
+
+        // РЕЗЕРВНЫЙ ВАРИАНТ: Если ИИ упал, отдаем шаблон, чтобы не было ошибки "Missing data"
+        return json_encode($this->getFallbackQuestions($topic));
+    }
+
+    private function isValidJson($string) {
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
+    }
+
+    private function getFallbackQuestions(Topic $topic) {
+        return [
+            [
+                'question' => "What is the main concept of {$topic->title}?",
+                'options' => ["Option A", "Option B", "Option C", "Option D"],
+                'correct_answer' => 0
+            ],
+            // Можно добавить еще пару базовых вопросов
+        ];
+    }
 }

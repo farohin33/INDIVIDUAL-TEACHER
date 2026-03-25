@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Topic;
+use App\Models\Lesson;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;;
@@ -39,11 +40,25 @@ class TopicController extends Controller
 
 }
 
-    public function show($id)
-    {
-        $topic = Topic::findOrFail($id);
-        return view('topics.show', compact('topic'));
+public function show($id)
+{
+    // Загружаем тему вместе с уроками
+    $topic = Topic::with('lessons')->findOrFail($id);
+    
+    // Если урока нет, создаем его "на лету" (или вызываем сервис ИИ)
+    $lesson = $topic->lessons->first();
+    
+    if (!$lesson) {
+        $lesson = Lesson::create([
+            'topic_id' => $topic->id,
+            'title' => $topic->title,
+            'content' => "Генерация контента для темы " . $topic->title . "... Пожалуйста, подождите."
+            // Здесь можно вызвать твой OllamaLessonService для реальной генерации
+        ]);
     }
+
+    return view('topics.show', compact('topic', 'lesson'));
+}
 
     public function edit($id)
     {

@@ -72,6 +72,11 @@ Route::get('/lesson/{lesson}', [LessonController::class, 'show'])->name('lesson.
 Route::get('/lesson/{lesson}/test',
     [TestController::class,'start']
 )->middleware('auth');
+Route::get('/topics/{id}', [TopicController::class, 'show'])->name('topics.show');
+
+// Маршруты для тестов (обязательно добавь store)
+Route::post('/tests/store', [TestController::class, 'store'])->name('tests.store');
+Route::get('/tests/{id}', [TestController::class, 'show'])->name('tests.show');
 
 /*
 |--------------------------------------------------------------------------

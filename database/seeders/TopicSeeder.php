@@ -192,11 +192,17 @@ class TopicSeeder extends Seeder
 
         ];
 
-        foreach ($topics as $topic) {
+        foreach ($topics as $data) {
+        // 1. Создаем тему и сохраняем объект в переменную
+        $topic = \App\Models\Topic::create($data);
 
-            Topic::create($topic);
+        // 2. СРАЗУ создаем к ней урок, чтобы lesson_id никогда не был null
+        \App\Models\Lesson::create([
+            'topic_id' => $topic->id,
+            'title' => "Introduction to " . $topic->title,
+            'content' => "This is the generated content for " . $topic->title,
+        ]);
 
-        }
-
+    }
     }
 }
