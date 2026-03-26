@@ -20,34 +20,12 @@
     </style>
 </head>
 <body class="bg-[#f8fafc] text-slate-900 overflow-hidden" x-data="{ search: '' }">
-
-<div class="flex h-screen">
-    
-    <aside class="w-80 sidebar-glass text-slate-300 flex flex-col z-50">
-        <div class="p-8">
-            <div class="flex items-center space-x-3 group cursor-pointer">
-                <div class="w-11 h-11 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform">
-                    <span class="text-white text-xl font-bold">AIT</span>
-                </div>
-                <div>
-                    <h1 class="text-white font-extrabold text-lg tracking-tight leading-none">AI Teacher</h1>
-                    <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mt-1">LMS Platform v2.0</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="px-6 mb-6">
-            <div class="relative group">
-                <span class="absolute inset-y-0 left-4 flex items-center text-slate-500 group-focus-within:text-indigo-400">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                </span>
-                <input x-model="search" type="text" placeholder="Quick search..." 
-                    class="w-full bg-slate-800/40 border border-slate-700/50 rounded-2xl py-3 pl-11 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder-slate-600 text-white">
-            </div>
-        </div>
+   
 
       
-    </aside>
+
+      
+    
 
     <main class="flex-1 overflow-y-auto relative bg-[#f8fafc]">
         <div class="fixed top-0 right-0 -z-10 w-[500px] h-[500px] bg-indigo-100/50 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
@@ -58,7 +36,7 @@
         </div>
     </main>
 
-</div>
+
 
 </body>
 </html>
