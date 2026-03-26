@@ -39,28 +39,26 @@ public function show($id) {
     return view('tests.show', compact('test', 'questions'));
 }public function store(Request $request)
 {
+    // Загружаем тему с уроками
     $topic = Topic::with('lessons')->findOrFail($request->topic_id);
     
-    // Получаем первый урок
-    $lesson = $topic->lessons->first();
+    // Получаем ID урока (если его нет — создаем пустой, чтобы не упала БД)
+    $lesson = $topic->lessons->first() ?: \App\Models\Lesson::create([
+        'topic_id' => $topic->id,
+        'title' => $topic->title,
+        'content' => 'Default content'
+    ]);
 
-    // Если урока нет (например, создали тему вручную), создаем его на лету
-    if (!$lesson) {
-        $lesson = \App\Models\Lesson::create([
-            'topic_id' => $topic->id,
-            'title' => "Basic " . $topic->title,
-            'content' => "Default lesson content.",
-        ]);
-    }
-
+    // Генерируем вопросы через наш новый сервис
     $generator = new \App\Services\AI\TestGeneratorService();
     $jsonQuestions = $generator->generate($topic);
 
+    // Создаем запись в таблице tests
     $test = \App\Models\Test::create([
-        'topic_id' => $topic->id,
-        'lesson_id' => $lesson->id, // Теперь тут гарантированно будет ID
-        'user_id' => auth()->id() ?? 1,
-        'questions_data' => $jsonQuestions,
+        'topic_id'       => $topic->id,
+        'lesson_id'      => $lesson->id,
+        'user_id'        => auth()->id() ?? 1,
+        'questions_data' => $jsonQuestions, // Здесь теперь всегда валидный JSON
     ]);
 
     return redirect()->route('tests.show', $test->id);
