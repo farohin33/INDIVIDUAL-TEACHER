@@ -21,5 +21,6 @@ class AppServiceProvider extends ServiceProvider
 {
     // Разрешаем скриптам работать до 2 минут (хватит для ИИ)
     set_time_limit(360);
+    error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
 }
 }
