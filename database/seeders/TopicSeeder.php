@@ -11,50 +11,47 @@ class TopicSeeder extends Seeder
     public function run(): void
     {
         // Списки реальных тем для твоих предметов
-        $data = [
-            'math' => [
-                'Производные', 'Интегралы', 'Тригонометрия', 'Логарифмы', 'Матрицы', 
-                'Векторы', 'Теория вероятностей', 'Статистика', 'Пределы', 'Ряды Фурье'
-            ],
-            'physics' => [
-                'Кинематика', 'Динамика', 'Термодинамика', 'Оптика', 'Квантовая физика', 
-                'Электричество', 'Магнетизм', 'Ядерная физика', 'Статика', 'Волны'
-            ],
-            'biology' => [
-                'Цитология (Клетки)', 'Генетика', 'Эволюция', 'Ботаника', 'Зоология', 
-                'Анатомия', 'Экология', 'Фотосинтез', 'ДНК и РНК', 'Вирусология'
-            ],
-            'programming' => [
-                'Переменные', 'Циклы', 'Функции', 'ООП', 'Массивы', 
-                'Рекурсия', 'Алгоритмы поиска', 'Структуры данных', 'API', 'Базы данных'
-            ],
-            'informatics' => [
-                'Системы счисления', 'Логика', 'Архитектура ЭВМ', 'Сети', 'Шифрование', 
-                'Excel и таблицы', 'Алгоритмизация', 'Облака', 'Кибербезопасность', 'ИИ'
-            ],
-            'chemistry' => [
-                'Таблица Менделеева', 'Органическая химия', 'Кислоты и основания', 'Растворы', 
-                'Электролиз', 'Термохимия', 'Полимеры', 'Газы', 'Окисление', 'Белки'
-            ]
-        ];
+     $data = [
+    'math' => [
+        'Derivatives', 'Integrals', 'Trigonometry', 'Logarithms', 'Matrices',
+        'Vectors', 'Probability Theory', 'Statistics', 'Limits', 'Fourier Series'
+    ],
+    'physics' => [
+        'Kinematics', 'Dynamics', 'Thermodynamics', 'Optics', 'Quantum Physics',
+        'Electricity', 'Magnetism', 'Nuclear Physics', 'Statics', 'Waves'
+    ],
+    'biology' => [
+        'Cytology (Cells)', 'Genetics', 'Evolution', 'Botany', 'Zoology',
+        'Anatomy', 'Ecology', 'Photosynthesis', 'DNA and RNA', 'Virology'
+    ],
+    'programming' => [
+        'Variables', 'Loops', 'Functions', 'OOP', 'Arrays',
+        'Recursion', 'Search Algorithms', 'Data Structures', 'API', 'Databases'
+    ],
+    'informatics' => [
+        'Number Systems', 'Logic', 'Computer Architecture', 'Networks', 'Encryption',
+        'Excel and Tables', 'Algorithmization', 'Cloud Computing', 'Cybersecurity', 'AI'
+    ],
+    'chemistry' => [
+        'Periodic Table', 'Organic Chemistry', 'Acids and Bases', 'Solutions',
+        'Electrolysis', 'Thermochemistry', 'Polymers', 'Gases', 'Oxidation', 'Proteins'
+    ]
+];
 
         $subjects = Subject::all();
 
-        foreach ($subjects as $subject) {
-            // Берем список тем для конкретного предмета (или пустой массив, если предмета нет в списке)
-            $subjectKey = strtolower($subject->name);
-            $titles = $data[$subjectKey] ?? [];
+      foreach ($data as $subjectName => $topics) {
+        // Находим или создаем предмет
+        $subject = \App\Models\Subject::firstOrCreate(['name' => $subjectName],['title' => $subjectName]);
 
-            for ($i = 1; $i <= 30; $i++) {
-                // Берем название из массива, если кончились — пишем "Дополнительная тема"
-                $titleText = $titles[$i - 1] ?? "Углубленное изучение часть {$i}";
+        foreach ($topics as $topicName) {
+            \App\Models\Topic::create([
+                'subject_id' => $subject->id,
+                'title' => $topicName, // Убедись, что в базе колонка называется title или name
 
-                Topic::create([
-                    'subject_id' => $subject->id,
-                    'name'       => $subjectKey . "-topic-{$i}", // Для URL (slug)
-                    'title'      => $titleText,                   // Красивое название
-                ]);
-            }
+                'name' => $topicName, // Контент будет пустой, пока не нажмешь "Generate"
+            ]);
         }
+    }
     }
 }
