@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Models\Subject;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\LessonController;
@@ -27,9 +27,12 @@ Route::get('/', function () {
 */
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    // Получаем все предметы из базы данных
+    $subjects = Subject::all(); 
+    
+    // Передаем их в файл resources/views/dashboard.blade.php
+    return view('dashboard', compact('subjects'));
 })->middleware(['auth'])->name('dashboard');
-
 
 /*
 |--------------------------------------------------------------------------
