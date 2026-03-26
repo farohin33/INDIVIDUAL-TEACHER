@@ -46,38 +46,7 @@
             </div>
         </div>
 
-        <nav class="flex-1 overflow-y-auto custom-scroll px-4 pb-10 space-y-2">
-            @foreach(\App\Models\Subject::with('topics')->get() as $subject)
-            <div x-data="{ open: false }" 
-                 x-show="search === '' || '{{ strtolower($subject->name) }}'.includes(search.toLowerCase())"
-                 class="rounded-2xl transition-all"
-                 :class="open ? 'bg-indigo-500/5 ring-1 ring-white/5' : ''">
-                
-                <button @click="open = !open" 
-                    class="w-full flex items-center justify-between px-4 py-3 hover:bg-white/5 rounded-2xl transition-all group">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-lg group-hover:bg-indigo-500 transition-colors">
-                            📚
-                        </div>
-                        <span class="font-semibold text-sm tracking-wide group-hover:text-white">{{ $subject->name }}</span>
-                    </div>
-                    <svg class="w-4 h-4 transition-transform duration-300 opacity-40" :class="open ? 'rotate-180 opacity-100 text-indigo-400' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </button>
-
-                <div x-show="open" x-collapse x-cloak class="mt-1 pb-2">
-                    @foreach($subject->topics as $topic)
-                    <a href="{{ route('topics.show', $topic->id) }}" 
-                       class="flex items-center space-x-3 py-2.5 pl-12 pr-4 text-[13px] text-slate-400 hover:text-white hover:bg-indigo-500/10 transition-all border-l-2 border-transparent hover:border-indigo-500">
-                        <span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span>
-                        <span class="truncate">{{ $topic->title }}</span>
-                    </a>
-                    @endforeach
-                </div>
-            </div>
-            @endforeach
-        </nav>
+      
     </aside>
 
     <main class="flex-1 overflow-y-auto relative bg-[#f8fafc]">

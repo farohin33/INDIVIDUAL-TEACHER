@@ -22,14 +22,19 @@
         ← Back to Topics
     </a>
     
-    <a href="{{ route('lesson.test', $lesson->id) }}" 
-       onclick="this.innerHTML='Generating Quiz...'; this.classList.add('opacity-50');"
-       class="bg-indigo-600 text-white px-8 py-3 rounded-xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center font-bold">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="Path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-        </svg>
-        Take Interactive Test
-    </a>
+   <a href="{{ route('lesson.generate', $topic->id ?? 1) }}" 
+                           onclick="this.innerHTML='<span class=\'animate-pulse flex items-center gap-2\'><svg class=\'w-4 h-4\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'3\' d=\'M13 10V3L4 14h7v7l9-11h-7z\'/></svg>🤖 Generating...</span>'; this.style.opacity='0.7'; this.style.pointerEvents='none';"
+                           class="relative overflow-hidden w-full inline-flex items-center justify-center px-6 py-4.5 bg-indigo-600 text-white font-black uppercase italic text-xs tracking-[0.2em] rounded-2xl transition-all hover:bg-indigo-500 hover:scale-[1.03] active:scale-95 shadow-lg shadow-indigo-600/30">
+                            
+                            <span class="relative z-10 flex items-center gap-2.5">
+                                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                Generate a lesson
+                            </span>
+
+                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full duration-1000 transition-transform"></div>
+                        </a>
 </div>
             </div>
         </div>

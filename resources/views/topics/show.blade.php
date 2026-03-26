@@ -15,17 +15,21 @@
             </h1>
         </div>
         
-        <form action="{{ route('tests.store') }}" method="POST">
-            @csrf
-            <input type="hidden" name="topic_id" value="{{ $topic->id }}">
-            <button type="submit" class="relative group inline-flex items-center px-8 py-4 bg-indigo-600 text-white font-bold rounded-2xl shadow-xl shadow-indigo-200 hover:bg-indigo-700 hover:-translate-y-1 transition-all active:scale-95 overflow-hidden">
-                <span class="relative z-10 flex items-center">
-                    <svg class="w-5 h-5 mr-2 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
-                    Generate Smart Quiz
-                </span>
-                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
-            </button>
-        </form>
+       <form action="{{ route('topics.generate_content', $topic->id) }}" method="POST">
+    @csrf
+    <button type="submit" 
+        onclick="this.disabled=true; this.innerHTML='<span class=\'animate-pulse\'>✨ Generating Lesson...</span>'; this.form.submit();"
+        class="relative group inline-flex items-center px-8 py-4 bg-indigo-600 text-white font-bold rounded-2xl shadow-lg shadow-indigo-500/20 hover:scale-105 transition-all active:scale-95">
+        <span class="relative z-10 flex items-center">
+            {{-- Иконка книги вместо молнии --}}
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.254 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            Generate AI Lesson
+        </span>
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
+    </button>
+</form>
     </div>
 
     <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/60 border border-slate-100 overflow-hidden">

@@ -89,7 +89,8 @@ Route::get('/tests/{id}', [TestController::class, 'show'])->name('tests.show');
 
 Route::get('/lesson/{lesson}/test', [LessonController::class, 'generateTest'])->name('lesson.test');
 
-
+Route::post('/topics/{topic}/generate-content', [App\Http\Controllers\TopicController::class, 'generateContent'])
+    ->name('topics.generate_content');
 /*
 |--------------------------------------------------------------------------
 | Auth Routes (Breeze)

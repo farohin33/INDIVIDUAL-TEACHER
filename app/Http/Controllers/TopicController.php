@@ -83,5 +83,16 @@ public function show($id)
 
         return redirect('/topics');
     }
+    public function generateContent(\App\Models\Topic $topic)
+{
+    // Опять же, чтобы AnyDesk не вылетел, используй API или заглушку для теста
+    $content = "## Урок по теме: {$topic->title}\n\nЗдесь будет сгенерированный текст урока...";
+    
+    $topic->update([
+        'content' => $content
+    ]);
+
+    return back()->with('success', 'Lesson generated successfully!');
+}
 
 }
